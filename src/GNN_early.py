@@ -9,7 +9,7 @@ from torch_geometric.nn import GCNConv, ChebConv  # noqa
 import time
 from data import get_dataset
 # from run_GNN import get_optimizer, train, test
-from early_stop_solver import EarlyStopInt
+from early_stop_solver_with_gear2 import EarlyStopInt
 from base_classes import BaseGNN
 from model_configurations import set_block, set_function
 
