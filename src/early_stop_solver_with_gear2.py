@@ -330,7 +330,7 @@ class Gear2(FixedGridODESolver, ODEFuncAtt):
 
 SOLVERS = {
   'dopri5': EarlyStopDopri5,
-  'rk4': EarlyStopRK4
+  'rk4': EarlyStopRK4,
   'gear2': Gear2
 }
 
