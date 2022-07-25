@@ -384,7 +384,7 @@ class EarlyStopInt(torch.nn.Module):
             an invalid dtype.
     """
     method = self.opt['method']
-    assert method in ['rk4', 'dopri5'], "Only dopri5 and rk4 implemented with early stopping"
+    assert method in ['rk4', 'dopri5', 'gear2'], "Only dopri5 and rk4 implemented with early stopping"
 
     ver = torchdiffeq.__version__
     if int(ver[0] + ver[2] + ver[4]) >= 20:  # 0.2.0 change of signature on this release for event_fn
