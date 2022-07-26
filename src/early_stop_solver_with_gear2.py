@@ -281,8 +281,112 @@ class Gear2(FixedGridODESolver, ODEFuncAtt):
       if val_acc > self.best_val:
         self.set_accs(train_acc, val_acc, test_acc, t1)
 
-      y1 = y2
       y0 = y1
+      y1 = y2
+    # todo would be nice if this was more efficient
+    return t1, solution
+
+  @torch.no_grad()
+  def test(self, logits):
+    accs = []
+    for _, mask in self.data('train_mask', 'val_mask', 'test_mask'):
+      pred = logits[mask].max(1)[1]
+      acc = pred.eq(self.data.y[mask]).sum().item() / mask.sum().item()
+      accs.append(acc)
+    return accs
+
+  @torch.no_grad()
+  def test_OGB(self, logits):
+    evaluator = self.evaluator
+    data = self.data
+    y_pred = logits.argmax(dim=-1, keepdim=True)
+    train_acc, valid_acc, test_acc = run_evaluator(evaluator, data, y_pred)
+    return [train_acc, valid_acc, test_acc]
+
+  @torch.no_grad()
+  def evaluate(self, z, t0, t1):
+    # Activation.
+    if not self.m2_weight.shape[1] == z.shape[1]:  # system has been augmented
+      z = torch.split(z, self.m2_weight.shape[1], dim=1)[0]
+    z = F.relu(z)
+    z = F.linear(z, self.m2_weight, self.m2_bias)
+    if self.dataset == 'ogbn-arxiv':
+      z = z.log_softmax(dim=-1)
+      loss = self.lf(z[self.data.train_mask], self.data.y.squeeze()[self.data.train_mask])
+    else:
+      loss = self.lf(z[self.data.train_mask], self.data.y[self.data.train_mask])
+    train_acc, val_acc, test_acc = self.ode_test(z)
+    log = 'ODE eval t0 {:.3f}, t1 {:.3f} Loss: {:.4f}, Train: {:.4f}, Val: {:.4f}, Test: {:.4f}'
+    # print(log.format(t0, t1, loss, train_acc, val_acc, tmp_test_acc))
+    return train_acc, val_acc, test_acc
+
+  def set_m2(self, m2):
+    self.m2 = copy.deepcopy(m2)
+
+  def set_data(self, data):
+    if self.data is None:
+      self.data = data
+      
+class Gear3(FixedGridODESolver, ODEFuncAtt):
+  order = 3
+
+  def __init__(self, func, y0, opt, eps=0, **kwargs):
+    super(Gear3, self).__init__(func, y0, **kwargs)
+    self.eps = torch.as_tensor(eps, dtype=self.dtype, device=self.device)
+    self.lf = torch.nn.CrossEntropyLoss()
+    self.m2_weight = None
+    self.m2_bias = None
+    self.data = None
+    self.best_val = 0
+    self.best_test = 0
+    self.best_time = 0
+    self.ode_test = self.test_OGB if opt['dataset'] == 'ogbn-arxiv' else self.test
+    self.dataset = opt['dataset']
+    if opt['dataset'] == 'ogbn-arxiv':
+      self.lf = torch.nn.functional.nll_loss
+      self.evaluator = Evaluator(name=opt['dataset'])
+
+  def set_accs(self, train, val, test, time):
+    self.best_train = train
+    self.best_val = val
+    self.best_test = test
+    self.best_time = time.item()
+
+  def integrate(self, t, y0, dt):  # t is needed when called by the integrator
+
+    time_grid = self.grid_constructor(self.func, self.y0, t)
+    assert time_grid[0] == t[0] and time_grid[-1] == t[-1]
+
+    solution = torch.empty(len(t), *self.y0.shape, dtype=self.y0.dtype, device=self.y0.device)
+    solution[0] = self.y0
+    y0 = self.y0
+
+    if self.nfe > self.opt["max_nfe"]:
+      raise MaxNFEException
+
+    self.nfe += 1
+
+    if not self.opt['no_alpha_sigmoid']:
+      alpha = torch.sigmoid(self.alpha_train)
+    else:
+      alpha = self.alpha_train
+
+    attention, wx = self.multihead_att_layer(x, self.edge_index)
+    a = self.multiply_attention(attention, wx)
+    y1 = torch.mul(torch.inverse(torch.mul(torch.ones(list(a.size())), 1+alpha*(t1-t0)) - torch.mul(a, alpha*dt)), y0)
+    y2 = torch.mul(torch.inverse(torch.mul(torch.ones(list(a.size())), 1+alpha*(t1-t0)) - torch.mul(a, (2/3)*alpha*dt)), (4/3)*y1 - (1/3)*y0)
+
+    for t0, t1 in zip(time_grid[:-1], time_grid[1:]):
+      #dy = self._step_func(self.func, t0, t1 - t0, t1, y0)
+      #y1 = y0 + dy
+      y3 = torch.mul(torch.inverse(torch.mul(torch.ones(list(a.size())), 1+alpha*(t1-t0)) - torch.mul(a, (6/11)*alpha*dt)), (18/11)*y2 - (9/11)*y1 + (2/11)*y0)
+      train_acc, val_acc, test_acc = self.evaluate(y3, t0, t1)
+      if val_acc > self.best_val:
+        self.set_accs(train_acc, val_acc, test_acc, t1)
+      
+      y0 = y1
+      y1 = y2
+      y2 = y3
     # todo would be nice if this was more efficient
     return t1, solution
 
@@ -331,7 +435,8 @@ class Gear2(FixedGridODESolver, ODEFuncAtt):
 SOLVERS = {
   'dopri5': EarlyStopDopri5,
   'rk4': EarlyStopRK4,
-  'gear2': Gear2
+  'gear2': Gear2,
+  'gear3': Gear3
 }
 
 
@@ -384,7 +489,7 @@ class EarlyStopInt(torch.nn.Module):
             an invalid dtype.
     """
     method = self.opt['method']
-    assert method in ['rk4', 'dopri5', 'gear2'], "Only dopri5 and rk4 implemented with early stopping"
+    assert method in ['rk4', 'dopri5', 'gear2', 'gear3'], "Only dopri5 and rk4 implemented with early stopping"
 
     ver = torchdiffeq.__version__
     if int(ver[0] + ver[2] + ver[4]) >= 20:  # 0.2.0 change of signature on this release for event_fn
