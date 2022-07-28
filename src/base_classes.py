@@ -42,9 +42,9 @@ class ODEblock(nn.Module):
     self.reg_odefunc = RegularizedODEfunc(self.odefunc, regularization_fns)
 
     if opt['adjoint']:
-      from torchdiffeq import odeint_adjoint as odeint
+      from .torchdiffeq import odeint_adjoint as odeint
     else:
-      from torchdiffeq import odeint
+      from .torchdiffeq import odeint
     self.train_integrator = odeint
     self.test_integrator = None
     self.set_tol()
