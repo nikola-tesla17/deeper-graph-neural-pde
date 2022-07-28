@@ -32,9 +32,9 @@ from data import set_train_val_test_split
 
 adjoint = False
 if adjoint:
-  from torchdiffeq import odeint_adjoint as odeint
+  from .torchdiffeq import odeint_adjoint as odeint
 else:
-  from torchdiffeq import odeint
+  from .torchdiffeq import odeint
 
 def get_optimizer(name, parameters, lr, weight_decay=0):
   if name == 'sgd':
