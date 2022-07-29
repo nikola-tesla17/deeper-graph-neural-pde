@@ -259,11 +259,6 @@ class Gear2(FixedGridODESolver):
     solution[0] = self.y0
     y0 = self.y0
 
-    if self.nfe > self.opt["max_nfe"]:
-      raise MaxNFEException
-
-    self.nfe += 1
-
     if not self.opt['no_alpha_sigmoid']:
       alpha = torch.sigmoid(self.alpha_train)
     else:
