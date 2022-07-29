@@ -149,7 +149,6 @@ class EarlyStopRK4(FixedGridODESolver):
       self.evaluator = Evaluator(name=opt['dataset'])
 
   def _step_func(self, func, t, dt, t1, y):
-    ver = torchdiffeq.__version__[0] + torchdiffeq.__version__[2] + torchdiffeq.__version__[4]
     return rk4_alt_step_func(func, t + self.eps, dt - 2 * self.eps, t1, y)
 
   def set_accs(self, train, val, test, time):
