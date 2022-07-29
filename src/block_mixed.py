@@ -20,9 +20,9 @@ class MixedODEblock(ODEblock):
     self.reg_odefunc.odefunc.edge_index, self.reg_odefunc.odefunc.edge_weight = self.odefunc.edge_index, self.odefunc.edge_weight
 
     if opt['adjoint']:
-      from .torchdiffeq import odeint_adjoint as odeint
+      from torchdiffeq import odeint_adjoint as odeint
     else:
-      from .torchdiffeq import odeint
+      from torchdiffeq import odeint
     self.train_integrator = odeint
     self.test_integrator = odeint
     self.set_tol()
