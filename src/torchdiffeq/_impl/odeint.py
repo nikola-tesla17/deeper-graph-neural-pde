@@ -19,7 +19,7 @@ SOLVERS = {
     'euler': Euler,
     'midpoint': Midpoint,
     'rk4': RK4,
-    'gear2': Gear2, 
+    'gear2': GGear2, 
     'explicit_adams': AdamsBashforth,
     'implicit_adams': AdamsBashforthMoulton,
     # Backward compatibility: use the same name as before
