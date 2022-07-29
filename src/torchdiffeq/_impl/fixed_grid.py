@@ -28,7 +28,7 @@ class RK4(FixedGridODESolver):
         f0 = func(t0, y0, perturb=Perturb.NEXT if self.perturb else Perturb.NONE)
         return rk4_alt_step_func(func, t0, dt, t1, y0, f0=f0, perturb=self.perturb), f0
     
-class Gear2(FixedGridODESolver):
+class GGear2(FixedGridODESolver):
     order = 2
 
     def _step_func(self, func, t0, dt, t1, y0):
