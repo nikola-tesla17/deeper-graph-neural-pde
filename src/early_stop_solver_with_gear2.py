@@ -225,8 +225,8 @@ class EarlyStopRK4(FixedGridODESolver):
 class Gear2(FixedGridODESolver, ODEFuncAtt):
   order = 2
 
-  def __init__(self, func, y0, opt, in_features, out_features, data, device, eps=0, **kwargs):
-    super(Gear2, self).__init__(func, y0, data, device, **kwargs)
+  def __init__(self, func, y0, opt, eps=0, **kwargs):
+    super(Gear2, self).__init__(func, y0, **kwargs)
     self.eps = torch.as_tensor(eps, dtype=self.dtype, device=self.device)
     self.lf = torch.nn.CrossEntropyLoss()
     self.m2_weight = None
@@ -496,7 +496,7 @@ class EarlyStopInt(torch.nn.Module):
                                                                                                 atol, method, options,
                                                                                                 event_fn, SOLVERS)
 
-    self.solver = SOLVERS[method](func, y0, in_features, out_features, data, device, rtol=rtol, atol=atol, opt=self.opt, **options)
+    self.solver = SOLVERS[method](func, y0, rtol=rtol, atol=atol, opt=self.opt, **options)
     if self.solver.data is None:
       self.solver.data = self.data
     self.solver.m2_weight = self.m2_weight
