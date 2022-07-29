@@ -222,7 +222,7 @@ class EarlyStopRK4(FixedGridODESolver):
     if self.data is None:
       self.data = data
 
-class Gear2(FixedGridODESolver, ODEFuncAtt, GGear2):
+class Gear2(FixedGridODESolver, ODEFuncAtt):
   order = 2
 
   def __init__(self, func, y0, opt, eps=0, **kwargs):
