@@ -20,6 +20,10 @@ class AdaptiveStepsizeODESolver(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def _advance(self, next_t):
         raise NotImplementedError
+        
+    @classmethod
+    def valid_callbacks(cls):
+        return set()
 
     def integrate(self, t):
         solution = torch.empty(len(t), *self.y0.shape, dtype=self.y0.dtype, device=self.y0.device)
