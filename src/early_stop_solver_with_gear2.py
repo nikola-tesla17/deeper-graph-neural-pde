@@ -1,13 +1,13 @@
 #import torchdiffeq
 from torchdiffeq._impl.dopri5 import _DORMAND_PRINCE_SHAMPINE_TABLEAU, DPS_C_MID
-from .torchdiffeq._impl.solvers import FixedGridODESolver
+from torchdiffeq._impl.solvers import FixedGridODESolver
 import torch
-from .torchdiffeq._impl.misc import _check_inputs, _flat_to_shape
+from torchdiffeq._impl.misc import _check_inputs, _flat_to_shape
 import torch.nn.functional as F
 import copy
 
-from .torchdiffeq._impl.interp import _interp_evaluate
-from .torchdiffeq._impl.rk_common import RKAdaptiveStepsizeODESolver, rk4_alt_step_func
+from torchdiffeq._impl.interp import _interp_evaluate
+from torchdiffeq._impl.rk_common import RKAdaptiveStepsizeODESolver, rk4_alt_step_func
 from function_GAT_attention import ODEFuncAtt
 from ogb.nodeproppred import Evaluator
 
