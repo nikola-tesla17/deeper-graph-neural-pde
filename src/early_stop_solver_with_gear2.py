@@ -250,7 +250,7 @@ class Gear2(FixedGridODESolver):
     self.best_test = test
     self.best_time = time.item()
 
-  def integrate(self, t, y0, dt):  # t is needed when called by the integrator
+  def integrate(self, t):  # t is needed when called by the integrator
 
     time_grid = self.grid_constructor(self.func, self.y0, t)
     assert time_grid[0] == t[0] and time_grid[-1] == t[-1]
