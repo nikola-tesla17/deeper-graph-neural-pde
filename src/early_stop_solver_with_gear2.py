@@ -240,6 +240,9 @@ class Gear2(FixedGridODESolver, ODEFuncAtt):
     if opt['dataset'] == 'ogbn-arxiv':
       self.lf = torch.nn.functional.nll_loss
       self.evaluator = Evaluator(name=opt['dataset'])
+      
+  def _step_func(self, func, t, dt, t1, y):
+    return _GGear2_step_func(self, func, t, dt, t1, y)
 
   def set_accs(self, train, val, test, time):
     self.best_train = train
