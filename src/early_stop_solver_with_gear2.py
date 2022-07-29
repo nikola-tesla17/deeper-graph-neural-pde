@@ -496,7 +496,7 @@ class EarlyStopInt(torch.nn.Module):
                                                                                                 atol, method, options,
                                                                                                 event_fn, SOLVERS)
 
-    self.solver = SOLVERS[method](func, y0, rtol=rtol, atol=atol, opt=self.opt, **options)
+    self.solver = SOLVERS[method](func, y0, in_features, out_features, data, device, rtol=rtol, atol=atol, opt=self.opt, **options)
     if self.solver.data is None:
       self.solver.data = self.data
     self.solver.m2_weight = self.m2_weight
