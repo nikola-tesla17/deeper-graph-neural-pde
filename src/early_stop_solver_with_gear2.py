@@ -1,6 +1,7 @@
 #import torchdiffeq
 from torchdiffeq._impl.dopri5 import _DORMAND_PRINCE_SHAMPINE_TABLEAU, DPS_C_MID
 from torchdiffeq._impl.solvers import FixedGridODESolver
+from torchdiffeq._impl.fixed_grid import GGear2
 import torch
 from torchdiffeq._impl.misc import _check_inputs, _flat_to_shape
 import torch.nn.functional as F
