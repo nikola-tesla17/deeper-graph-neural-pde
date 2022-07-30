@@ -306,9 +306,9 @@ class Gear2(FixedGridODESolver):
     device = self.device
     
     if self.att_opt['self_loop_weight'] > 0:
-      self.edge_index, self.edge_weight = add_remaining_self_loops(self.data.x.edge_index, self.data.x.edge_attr, fill_value=self.att_opt['self_loop_weight'])
+      self.edge_index, self.edge_weight = add_remaining_self_loops(self.data.edge_index, self.data.edge_attr, fill_value=self.att_opt['self_loop_weight'])
     else:
-      self.edge_index, self.edge_weight = self.data.x.edge_index, self.data.x.edge_attr
+      self.edge_index, self.edge_weight = self.data.edge_index, self.data.edge_attr
 
     self.multihead_att_layer = SpGraphAttentionLayer(in_features, out_features, self.att_opt, self.device).to(device)
     attention, wx = self.multihead_att_layer(self.data.x, self.edge_index)
