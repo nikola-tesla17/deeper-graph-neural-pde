@@ -267,7 +267,7 @@ class Gear2(FixedGridODESolver):
     
     #print(opt)
     print(self.ode_test)
-    if not self.no_alpha_sigmoid::
+    if not self.no_alpha_sigmoid:
       alpha = torch.sigmoid(self.alpha_train)
     else:
       alpha = self.alpha_train
