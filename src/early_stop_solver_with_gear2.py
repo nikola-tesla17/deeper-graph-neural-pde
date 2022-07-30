@@ -256,6 +256,7 @@ class Gear2(FixedGridODESolver):
     self. att_opt = {'dataset': self.dataset, 'self_loop_weight': 1, 'leaky_relu_slope': 0.2, 'beta_dim': 'vc', 'heads': 1, 'K': 10, 'attention_norm_idx': 0, 'add_source':False, 'alpha_dim': 'sc', 'beta_dim': 'vc', 'max_nfe':1000, 'mix_features': False}
     #self.multihead_att_layer = SpGraphAttentionLayer(in_features, out_features, self.att_opt, self.device).to(device)
     self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    device = self.device
     
     if opt['dataset'] == 'ogbn-arxiv':
       self.lf = torch.nn.functional.nll_loss
