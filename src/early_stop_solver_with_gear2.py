@@ -11,6 +11,7 @@ import copy
 from torchdiffeq._impl.interp import _interp_evaluate
 from torchdiffeq._impl.rk_common import RKAdaptiveStepsizeODESolver, rk4_alt_step_func
 from function_GAT_attention import ODEFuncAtt
+from function_GAT_attention import SpGraphAttentionLayer
 from ogb.nodeproppred import Evaluator
 
 from torch_geometric.utils import softmax
