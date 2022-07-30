@@ -12,6 +12,7 @@ from torchdiffeq._impl.interp import _interp_evaluate
 from torchdiffeq._impl.rk_common import RKAdaptiveStepsizeODESolver, rk4_alt_step_func
 from function_GAT_attention import ODEFuncAtt
 from function_GAT_attention import SpGraphAttentionLayer
+from torch_geometric.utils.loop import add_remaining_self_loops
 from ogb.nodeproppred import Evaluator
 
 from torch_geometric.utils import softmax
@@ -303,6 +304,12 @@ class Gear2(FixedGridODESolver):
     in_features = self.data.x.shape[1]
     out_features = self.data.x.shape[1]
     device = self.device
+    
+    if self.att_opt['self_loop_weight'] > 0:
+      self.edge_index, self.edge_weight = add_remaining_self_loops(self.data.x.edge_index, self.data.x.edge_attr, fill_value=self.att_opt['self_loop_weight'])
+    else:
+      self.edge_index, self.edge_weight = self.data.x.edge_index, self.data.x.edge_attr
+
     self.multihead_att_layer = SpGraphAttentionLayer(in_features, out_features, self.att_opt, self.device).to(device)
     attention, wx = self.multihead_att_layer(self.data.x, self.edge_index)
     a = self.multiply_attention(attention, wx)
