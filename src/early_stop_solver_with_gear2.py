@@ -500,7 +500,9 @@ class EarlyStopInt(torch.nn.Module):
                                                                                                 atol, method, options,
                                                                                                 event_fn, SOLVERS)
 
+    print(self.opt['max_iters'])
     self.opt['max_iters'] = 5
+    print(self.opt['max_iters'])
     self.solver = SOLVERS[method](func, y0, opt=self.opt, **options) #rtol=rtol, atol=atol,# opt=self.opt, **options)
     if self.solver.data is None:
       self.solver.data = self.data
