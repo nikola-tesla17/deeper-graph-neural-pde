@@ -222,13 +222,14 @@ class EarlyStopRK4(FixedGridODESolver):
     if self.data is None:
       self.data = data
 
-class Gear2(FixedGridODESolver, ODEFuncAtt):
+class Gear2(FixedGridODESolver):
   order = 2
   
-  def __init__(self, func, y0, opt, eps=0, step_size=None, grid_constructor=None, interp="linear", perturb=False, **unused_kwargs):
+  #def __init__(self, func, y0, opt, eps=0, step_size=None, grid_constructor=None, interp="linear", perturb=False, **unused_kwargs):
+  def __init__(self, func, y0, opt,**unused_kwargs):
     #super().__init__()
-    super(FixedGridODESolver, self).__init__(self, func, y0, **unused_kwargs) #step_size = step_size, grid_constructor=grid_constructor, interp=interp, perturb=perturb, **kwargs)
-    ODEFuncAtt.__init__(self) #in_features, out_features, opt, data, device)
+    super(Gear2, self).__init__(func, y0, **unused_kwargs) #step_size = step_size, grid_constructor=grid_constructor, interp=interp, perturb=perturb, **kwargs)
+    #ODEFuncAtt.__init__(self) #in_features, out_features, opt, data, device)
     #super(Gear2, self).__init__(func, y0, **kwargs)
     #super(Gear2, self).__init__(func, y0, rtol, atol, **kwargs)
     self.eps = torch.as_tensor(eps, dtype=self.dtype, device=self.device)
@@ -503,7 +504,7 @@ class EarlyStopInt(torch.nn.Module):
     print(self.opt['max_iters'])
     self.opt['max_iters'] = 5
     print(self.opt['max_iters'])
-    self.solver = SOLVERS[method](func, y0, opt=self.opt, **options) #rtol=rtol, atol=atol,# opt=self.opt, **options)
+    self.solver = SOLVERS[method](func, y0, rtol = rtol, atol = atol, opt=self.opt, **options) #rtol=rtol, atol=atol,# opt=self.opt, **options)
     if self.solver.data is None:
       self.solver.data = self.data
     self.solver.m2_weight = self.m2_weight
