@@ -241,6 +241,7 @@ class Gear2(FixedGridODESolver):
     self.best_test = 0
     self.best_time = 0
     self.ode_test = self.test_OGB if opt['dataset'] == 'ogbn-arxiv' else self.test
+    self.no_alpha_sigmoid=False
     self.dataset = opt['dataset']
     if opt['dataset'] == 'ogbn-arxiv':
       self.lf = torch.nn.functional.nll_loss
@@ -266,7 +267,7 @@ class Gear2(FixedGridODESolver):
     
     #print(opt)
     print(self.ode_test)
-    if not self.opt['no_alpha_sigmoid']:
+    if not self.no_alpha_sigmoid::
       alpha = torch.sigmoid(self.alpha_train)
     else:
       alpha = self.alpha_train
