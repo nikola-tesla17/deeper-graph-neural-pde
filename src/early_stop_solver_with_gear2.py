@@ -254,7 +254,7 @@ class Gear2(FixedGridODESolver):
     self.alpha_train = nn.Parameter(torch.tensor(0.2))
     self.dataset = opt['dataset']
     self. att_opt = {'dataset': self.dataset, 'self_loop_weight': 1, 'leaky_relu_slope': 0.2, 'beta_dim': 'vc', 'heads': 2, 'K': 10, 'attention_norm_idx': 0, 'add_source':False, 'alpha_dim': 'sc', 'beta_dim': 'vc', 'max_nfe':1000, 'mix_features': False}
-    self.multihead_att_layer = SpGraphAttentionLayer(in_features, out_features, self.att_opt, self.device).to(device)
+    #self.multihead_att_layer = SpGraphAttentionLayer(in_features, out_features, self.att_opt, self.device).to(device)
     
     if opt['dataset'] == 'ogbn-arxiv':
       self.lf = torch.nn.functional.nll_loss
@@ -298,7 +298,8 @@ class Gear2(FixedGridODESolver):
       alpha = torch.sigmoid(self.alpha_train)
     else:
       alpha = self.alpha_train
-
+    
+    self.multihead_att_layer = SpGraphAttentionLayer(in_features, out_features, self.att_opt, self.device).to(device)
     attention, wx = self.multihead_att_layer(x, self.edge_index)
     a = self.multiply_attention(attention, wx)
     y1 = torch.mul(torch.inverse(torch.mul(torch.ones(list(a.size())), 1+alpha*(t1-t0)) - torch.mul(a, alpha*dt)), y0)
