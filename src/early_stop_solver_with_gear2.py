@@ -13,6 +13,13 @@ from torchdiffeq._impl.rk_common import RKAdaptiveStepsizeODESolver, rk4_alt_ste
 from function_GAT_attention import ODEFuncAtt
 from ogb.nodeproppred import Evaluator
 
+from torch_geometric.utils import softmax
+import torch_sparse
+from torch_geometric.utils.loop import add_remaining_self_loops
+from data import get_dataset
+from utils import MaxNFEException
+from base_classes import ODEFunc
+
 
 def run_evaluator(evaluator, data, y_pred):
   train_acc = evaluator.eval({
@@ -245,6 +252,11 @@ class Gear2(FixedGridODESolver):
     self.no_alpha_sigmoid=False
     self.alpha_train = nn.Parameter(torch.tensor(0.2))
     self.dataset = opt['dataset']
+    self. att_opt = {'dataset': self.dataset 'self_loop_weight': 1, 'leaky_relu_slope': 0.2, 'beta_dim': 'vc', 'heads': 2, 'K': 10, 'attention_norm_idx': 0,
+         'add_source':False, 'alpha_dim': 'sc', 'beta_dim': 'vc', 'max_nfe':1000, 'mix_features': False}
+    self.multihead_att_layer = SpGraphAttentionLayer(in_features, out_features, self.att_opt,
+                                                   self.device).to(device)
+    
     if opt['dataset'] == 'ogbn-arxiv':
       self.lf = torch.nn.functional.nll_loss
       self.evaluator = Evaluator(name=opt['dataset'])
@@ -257,6 +269,20 @@ class Gear2(FixedGridODESolver):
     self.best_val = val
     self.best_test = test
     self.best_time = time.item()
+  
+  def multiply_attention(self, x, attention, wx):
+    if self.opt['mix_features']:
+      wx = torch.mean(torch.stack(
+        [torch_sparse.spmm(self.edge_index, attention[:, idx], wx.shape[0], wx.shape[0], wx) for idx in
+         range(self.opt['heads'])], dim=0),
+        dim=0)
+      ax = torch.mm(wx, self.multihead_att_layer.Wout)
+    else:
+      ax = torch.mean(torch.stack(
+        [torch_sparse.spmm(self.edge_index, attention[:, idx], x.shape[0], x.shape[0], x) for idx in
+         range(self.opt['heads'])], dim=0),
+        dim=0)
+    return 
 
   def integrate(self, t):  # t is needed when called by the integrator
 
