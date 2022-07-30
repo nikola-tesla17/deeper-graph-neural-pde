@@ -228,7 +228,7 @@ class Gear2(FixedGridODESolver):
   #def __init__(self, func, y0, opt, eps=0, step_size=None, grid_constructor=None, interp="linear", perturb=False, **unused_kwargs):
   def __init__(self, func, y0, opt, eps = 0, **unused_kwargs):
     #super().__init__()
-    super(Gear2, self).__init__(func, y0, **unused_kwargs) #step_size = step_size, grid_constructor=grid_constructor, interp=interp, perturb=perturb, **kwargs)
+    super(Gear2, self).__init__(func, y0, opt, **unused_kwargs) #step_size = step_size, grid_constructor=grid_constructor, interp=interp, perturb=perturb, **kwargs)
     #ODEFuncAtt.__init__(self) #in_features, out_features, opt, data, device)
     #super(Gear2, self).__init__(func, y0, **kwargs)
     #super(Gear2, self).__init__(func, y0, rtol, atol, **kwargs)
@@ -263,7 +263,8 @@ class Gear2(FixedGridODESolver):
     solution = torch.empty(len(t), *self.y0.shape, dtype=self.y0.dtype, device=self.y0.device)
     solution[0] = self.y0
     y0 = self.y0
-
+    
+    print(self.opt['no_alpha_sigmoid'])
     if not self.opt['no_alpha_sigmoid']:
       alpha = torch.sigmoid(self.alpha_train)
     else:
