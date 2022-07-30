@@ -226,7 +226,7 @@ class Gear2(FixedGridODESolver):
   order = 2
   
   #def __init__(self, func, y0, opt, eps=0, step_size=None, grid_constructor=None, interp="linear", perturb=False, **unused_kwargs):
-  def __init__(self, func, y0, opt, eps = 0, **unused_kwargs):
+  def __init__(self, func, y0, opt, data, device, eps = 0, **unused_kwargs):
     #super().__init__()
     super(ODEFuncAtt, self).__init__(opt, data, **unused_kwargs) #step_size = step_size, grid_constructor=grid_constructor, interp=interp, perturb=perturb, **kwargs)
     #ODEFuncAtt.__init__(self) #in_features, out_features, opt, data, device)
