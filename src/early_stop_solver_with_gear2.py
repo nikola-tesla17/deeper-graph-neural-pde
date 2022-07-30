@@ -264,7 +264,7 @@ class Gear2(FixedGridODESolver):
     solution[0] = self.y0
     y0 = self.y0
     
-    print(opt)
+    #print(opt)
     print(self.ode_test)
     if not self.opt['no_alpha_sigmoid']:
       alpha = torch.sigmoid(self.alpha_train)
