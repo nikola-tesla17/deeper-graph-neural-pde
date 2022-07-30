@@ -222,7 +222,7 @@ class EarlyStopRK4(FixedGridODESolver):
     if self.data is None:
       self.data = data
 
-class Gear2(FixedGridODESolver):
+class Gear2(FixedGridODESolver, ODEFuncAtt):
   order = 2
 
   def __init__(self, func, y0, opt, eps=0, **kwargs):
@@ -263,6 +263,11 @@ class Gear2(FixedGridODESolver):
       alpha = torch.sigmoid(self.alpha_train)
     else:
       alpha = self.alpha_train
+      
+    if not self.opt['no_alpha_sigmoid']:
+      alpha = torch.sigmoid(self.alpha_train)
+    else:
+      alpha = self.alpha_train
 
     attention, wx = self.multihead_att_layer(x, self.edge_index)
     a = self.multiply_attention(attention, wx)
@@ -280,6 +285,11 @@ class Gear2(FixedGridODESolver):
       y1 = y2
     # todo would be nice if this was more efficient
     return t1, solution
+  
+  if self.nfe > self.opt["max_nfe"]:
+      raise MaxNFEException
+
+    self.nfe += 1
 
   @torch.no_grad()
   def test(self, logits):
