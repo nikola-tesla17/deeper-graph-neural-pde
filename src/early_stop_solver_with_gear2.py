@@ -311,6 +311,7 @@ class Gear2(FixedGridODESolver):
       self.edge_index, self.edge_weight = self.data.edge_index, self.data.edge_attr
 
     self.multihead_att_layer = SpGraphAttentionLayer(in_features, out_features, self.att_opt, self.device).to(device)
+    print(self.data.x.shape)
     attention, wx = self.multihead_att_layer(self.data.x, self.edge_index)
     a = self.multiply_attention(attention, wx)
     y1 = torch.mul(torch.inverse(torch.mul(torch.ones(list(a.size())), 1+alpha*(t1-t0)) - torch.mul(a, alpha*dt)), y0)
