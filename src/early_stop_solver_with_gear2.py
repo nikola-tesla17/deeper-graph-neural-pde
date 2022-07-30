@@ -224,9 +224,12 @@ class EarlyStopRK4(FixedGridODESolver):
 
 class Gear2(FixedGridODESolver, ODEFuncAtt):
   order = 2
-
+  
   def __init__(self, func, y0, opt, eps=0, **kwargs):
-    super(Gear2, self).__init__(func, y0, **kwargs)
+    #super().__init__()
+    FixedGridODESolver.__init__(self, func, y0, step_size=None, grid_constructor=None, interp="linear", perturb=False, **unused_kwargs)
+    ODEFuncAtt.__init__(self) #in_features, out_features, opt, data, device)
+    #super(Gear2, self).__init__(func, y0, **kwargs)
     #super(Gear2, self).__init__(func, y0, rtol, atol, **kwargs)
     self.eps = torch.as_tensor(eps, dtype=self.dtype, device=self.device)
     self.lf = torch.nn.CrossEntropyLoss()
