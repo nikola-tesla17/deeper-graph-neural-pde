@@ -283,7 +283,7 @@ class Gear2(FixedGridODESolver):
         [torch_sparse.spmm(self.edge_index, attention[:, idx], x.shape[0], x.shape[0], x) for idx in
          range(self.att_opt['heads'])], dim=0),
         dim=0)
-    return 
+    return ax
 
   def integrate(self, t):  # t is needed when called by the integrator
 
