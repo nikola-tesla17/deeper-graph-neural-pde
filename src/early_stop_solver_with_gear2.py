@@ -226,7 +226,7 @@ class Gear2(FixedGridODESolver, ODEFuncAtt):
   order = 2
 
   def __init__(self, func, y0, opt, eps=0, **kwargs):
-    super(Gear2, self).__init__(func, y0, **kwargs)
+    #super(Gear2, self).__init__(func, y0, **kwargs)
     self.eps = torch.as_tensor(eps, dtype=self.dtype, device=self.device)
     self.lf = torch.nn.CrossEntropyLoss()
     self.m2_weight = None
