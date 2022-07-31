@@ -312,7 +312,7 @@ class Gear2(FixedGridODESolver):
 
     self.multihead_att_layer = SpGraphAttentionLayer(in_features, out_features, self.att_opt, self.device).to(device)
     print(self.data.x.shape)
-    attention, wx = self.multihead_att_layer(self.data.x, self.edge_index)
+    attention, wx = self.multihead_att_layer(self.data.x, self.data.edge_index)
     a = self.multiply_attention(self.data.x, attention, wx)
     t0 = t[0]
     t1 = t[-1]
