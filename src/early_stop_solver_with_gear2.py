@@ -318,11 +318,11 @@ class Gear2(FixedGridODESolver):
     t1 = t[-1]
     dt = t1 - t0
     print(a.size)
-    y1 = torch.mul(torch.inverse(torch.mul(torch.ones(list(a.size())), 1+alpha*(t1-t0)) - torch.mul(a, alpha*dt)), y0)
     
     for t0, t1 in zip(time_grid[:-1], time_grid[1:]):
       #dy = self._step_func(self.func, t0, t1 - t0, t1, y0)
       #y1 = y0 + dy
+      y1 = torch.mul(torch.inverse(torch.mul(torch.ones(list(a.size())), 1+alpha*(t1-t0)) - torch.mul(a, alpha*dt)), y0)
       y2 = torch.mul(torch.inverse(torch.mul(torch.ones(list(a.size())), 1+alpha*(t1-t0)) - torch.mul(a, (2/3)*alpha*dt)), (4/3)*y1 - (1/3)*y0)
       train_acc, val_acc, test_acc = self.evaluate(y2, t0, t1)
       if val_acc > self.best_val:
