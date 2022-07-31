@@ -314,8 +314,11 @@ class Gear2(FixedGridODESolver):
     print(self.data.x.shape)
     attention, wx = self.multihead_att_layer(self.data.x, self.edge_index)
     a = self.multiply_attention(self.data.x, attention, wx)
+    t0 = t[0]
+    t1 = t[-1]
+    dt = t1 - t0
     y1 = torch.mul(torch.inverse(torch.mul(torch.ones(list(a.size())), 1+alpha*(t1-t0)) - torch.mul(a, alpha*dt)), y0)
-
+    
     for t0, t1 in zip(time_grid[:-1], time_grid[1:]):
       #dy = self._step_func(self.func, t0, t1 - t0, t1, y0)
       #y1 = y0 + dy
