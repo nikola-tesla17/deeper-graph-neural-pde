@@ -254,7 +254,7 @@ class Gear2(FixedGridODESolver):
     self.no_alpha_sigmoid=False
     self.alpha_train = nn.Parameter(torch.tensor(0.2))
     self.dataset = opt['dataset']
-    self. att_opt = {'Cora': self.dataset, 'self_loop_weight': 0, 'leaky_relu_slope': 0.2, 'beta_dim': 'vc', 'heads': 2, 'K': 10, 'attention_norm_idx': 0, 'add_source':False, 'alpha_dim': 'sc', 'beta_dim': 'vc', 'max_nfe':1000, 'mix_features': False}
+    self. att_opt = {'Cora': self.dataset, 'self_loop_weight': 0, 'leaky_relu_slope': 0.2, 'beta_dim': 'vc', 'heads': 1, 'K': 10, 'attention_norm_idx': 0, 'add_source':False, 'alpha_dim': 'sc', 'beta_dim': 'vc', 'max_nfe':1000, 'mix_features': False}
     #self.multihead_att_layer = SpGraphAttentionLayer(in_features, out_features, self.att_opt, self.device).to(device)
     self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     
