@@ -317,7 +317,7 @@ class Gear2(FixedGridODESolver):
     t0 = t[0]
     t1 = t[-1]
     dt = t1 - t0
-    print(t)
+    print(a.size)
     y1 = torch.mul(torch.inverse(torch.mul(torch.ones(list(a.size())), 1+alpha*(t1-t0)) - torch.mul(a, alpha*dt)), y0)
     
     for t0, t1 in zip(time_grid[:-1], time_grid[1:]):
