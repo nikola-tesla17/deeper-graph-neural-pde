@@ -307,7 +307,7 @@ class Gear2(FixedGridODESolver):
     attention, wx = self.multihead_att_layer(self.data.x, self.data.edge_index)
     
     print(self.data.x.shape, attention.size(), wx.size())
-    a = self.multiply_attention(attention, self.data.x)
+    a = self.multiply_attention(attention, wx)
     t0 = t[0]
     t1 = t[-1]
     dt = t1 - t0
