@@ -61,6 +61,7 @@ class AttentionTests(unittest.TestCase):
 
     att_layer = SpGraphAttentionLayer(in_features, out_features, self.opt, self.device, concat=True)
     attention, _ = att_layer(self.x, self.edge)  # should be n_edges x n_heads
+    print(attention.shape), 22, class AttentionTest() , 106, AttentionTests.test_function()
     self.assertTrue(attention.shape == (self.edge.shape[1], self.opt['heads']))
     dense_attention1 = to_dense_adj(self.edge, edge_attr=attention[:, 0]).squeeze()
     dense_attention2 = to_dense_adj(self.edge, edge_attr=attention[:, 1]).squeeze()
@@ -95,7 +96,7 @@ class AttentionTests(unittest.TestCase):
 
     self.assertTrue(torch.all(torch.eq(attention, 0.5 * torch.ones((self.edge1.shape[1], self.x1.shape[1])))))
     
-  print(attention.shape)
+  #print(attention.shape)
 
   def test_module(self):
     dataset = get_dataset(self.opt, '../data', False)
