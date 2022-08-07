@@ -107,4 +107,5 @@ class AttentionTests():
     print(out.shape)
     self.assertTrue(out.shape == (dataset.data.num_nodes, dataset.num_features))
     
-AttentionTests.test_function()
+ob = AttentionTests
+ob.test_function()
