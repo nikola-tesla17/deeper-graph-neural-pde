@@ -19,7 +19,7 @@ from data import get_dataset
 from test_params import OPT
 
 
-class AttentionTests(unittest.TestCase):
+class AttentionTests():
   def setUp(self):
     self.edge = tensor([[0, 2, 2, 1], [1, 0, 1, 2]])
     self.x = tensor([[1., 2.], [3., 2.], [4., 5.]], dtype=torch.float)
@@ -61,7 +61,7 @@ class AttentionTests(unittest.TestCase):
 
     att_layer = SpGraphAttentionLayer(in_features, out_features, self.opt, self.device, concat=True)
     attention, _ = att_layer(self.x, self.edge)  # should be n_edges x n_heads
-    print(attention.shape), 22, class AttentionTest() , 106, AttentionTests.test_function()
+    print(attention.shape)
     self.assertTrue(attention.shape == (self.edge.shape[1], self.opt['heads']))
     dense_attention1 = to_dense_adj(self.edge, edge_attr=attention[:, 0]).squeeze()
     dense_attention2 = to_dense_adj(self.edge, edge_attr=attention[:, 1]).squeeze()
@@ -106,3 +106,5 @@ class AttentionTests(unittest.TestCase):
     out = func(t, dataset.data.x)
     print(out.shape)
     self.assertTrue(out.shape == (dataset.data.num_nodes, dataset.num_features))
+    
+AttentionTests.test_function()
