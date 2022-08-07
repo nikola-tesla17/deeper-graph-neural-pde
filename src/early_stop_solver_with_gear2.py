@@ -271,7 +271,7 @@ class Gear2(FixedGridODESolver):
     self.best_test = test
     self.best_time = time.item()
   
-  def multiply_attention(self, x, attention, wx):
+  def multiply_attention(self, attention, x):
     a = torch.mean(torch.stack([torch_sparse.spmm(self.edge_index, attention[:, idx], x.shape[0], x.shape[0]) for idx in range(self.att_opt['heads'])], dim=0),dim=0)
   return a
 
@@ -305,7 +305,7 @@ class Gear2(FixedGridODESolver):
     attention, wx = self.multihead_att_layer(self.data.x, self.data.edge_index)
     
     print(self.data.x.shape, attention.size(), wx.size())
-    a = self.multiply_attention(attention, wx)
+    a = self.multiply_attention(attention, self.data.x)
     t0 = t[0]
     t1 = t[-1]
     dt = t1 - t0
