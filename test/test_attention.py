@@ -94,6 +94,8 @@ class AttentionTests(unittest.TestCase):
     attention, _ = att_layer(self.x1, self.edge1)  # should be n_edges x n_heads
 
     self.assertTrue(torch.all(torch.eq(attention, 0.5 * torch.ones((self.edge1.shape[1], self.x1.shape[1])))))
+    
+  print(attention.shape)
 
   def test_module(self):
     dataset = get_dataset(self.opt, '../data', False)
