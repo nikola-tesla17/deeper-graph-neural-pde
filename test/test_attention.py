@@ -19,7 +19,7 @@ from data import get_dataset
 from test_params import OPT
 
 
-class AttentionTests():
+class AttentionTests:
   def setUp(self):
     self.edge = tensor([[0, 2, 2, 1], [1, 0, 1, 2]])
     self.x = tensor([[1., 2.], [3., 2.], [4., 5.]], dtype=torch.float)
