@@ -272,8 +272,8 @@ class Gear2(FixedGridODESolver):
     self.best_time = time.item()
   
   def multiply_attention(self, x, attention, wx):
-    ax = torch.mean(torch.stack([torch_sparse.spmm(self.edge_index, attention[:, idx], x.shape[0], x.shape[0], x) for idx in range(self.att_opt['heads'])], dim=0),dim=0)
-  return ax
+    a = torch.mean(torch.stack([torch_sparse.spmm(self.edge_index, attention[:, idx], x.shape[0], x.shape[0]) for idx in range(self.att_opt['heads'])], dim=0),dim=0)
+  return a
 
   def integrate(self, t):  # t is needed when called by the integrator
 
