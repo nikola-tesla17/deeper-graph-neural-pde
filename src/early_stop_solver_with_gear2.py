@@ -273,7 +273,7 @@ class Gear2(FixedGridODESolver):
   
   def multiply_attention(self, attention, x):
     a = torch.mean(torch.stack([torch_sparse.spmm(self.edge_index, attention[:, idx], x.shape[0], x.shape[0]) for idx in range(self.att_opt['heads'])], dim=0),dim=0)
-  return a
+    return a
 
   def integrate(self, t):  # t is needed when called by the integrator
 
